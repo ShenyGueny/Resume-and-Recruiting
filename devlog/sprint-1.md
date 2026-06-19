@@ -25,6 +25,29 @@
 
 **Model import ordering for `create_all`** — SQLAlchemy's `create_all` only creates tables for models it knows about at call time. Solved by importing `app.models` explicitly in `main.py` before the `create_all` call, ensuring all four models are registered.
 
+## Testing
+
+A `pytest` integration suite was added in `backend/tests/` covering all 21 Sprint 1 endpoints. Tests run against a live Postgres container (started via `docker-compose up -d db`) using FastAPI's `TestClient` with the `get_db` dependency overridden per test. Tables are dropped and recreated before each test to guarantee clean state.
+
+**To run:**
+```bash
+pip install -r backend/requirements-test.txt
+docker-compose up -d db
+cd backend && python -m pytest -v
+```
+
+**Coverage breakdown:**
+
+| Module | Tests |
+|---|---|
+| Auth | register, duplicate email rejection, login, wrong password, unknown email, `GET /auth/me` (auth + unauth), API key hint storage |
+| Profile | 404 before creation, upsert creates, upsert updates in place, `GET` after upsert, unauth rejection |
+| Applications | empty list, create, get by ID, 404, PATCH status, delete → verify gone, user isolation, full Kanban status cycle |
+
+**Why SQLite was not used** — The models use `postgresql.UUID` and `postgresql.JSONB` dialect types that are incompatible with SQLite. Tests require a real Postgres instance; the existing dev Docker container satisfies this with no extra setup.
+
+**Known warnings** — `datetime.utcnow()` deprecation notices from `auth_service.py` and `python-jose`. These are non-breaking and will be resolved before the AWS production deploy by switching to `datetime.now(datetime.UTC)`.
+
 ## Sprint 2 Preview — AI Pipeline
 
 Next sprint wires in the multi-agent LLM pipeline:

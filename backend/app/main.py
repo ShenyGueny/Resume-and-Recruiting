@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import Base, engine
-from .routers import auth, profile, applications
+from .routers import auth, profile, applications, pipeline
 from .config import settings
 
 import app.models  # ensure all models are registered before create_all
@@ -27,6 +27,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(profile.router)
 app.include_router(applications.router)
+app.include_router(pipeline.router)
 
 
 @app.get("/health")

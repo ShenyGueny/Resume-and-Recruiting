@@ -6,6 +6,7 @@ pydantic[email]==2.7.1
 pydantic-settings==2.2.1
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
+bcrypt==4.0.1  # pinned: passlib 1.7.4 is incompatible with bcrypt 5.x (hashpw raises on >72 bytes)
 python-multipart==0.0.9
 cryptography==42.0.7
 anthropic>=0.28.0

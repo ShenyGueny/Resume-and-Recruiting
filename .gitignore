@@ -1,1 +1,18 @@
 CLAUDE.md
+
+# Secrets — never commit real env files (use .env.example as the template)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Misc / editor
+.Rhistory
+.DS_Store
